@@ -36,6 +36,7 @@ under the License.
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<fpml-legal-version>5.11.0-51</fpml-legal-version>
+		<mockitoversion>2.7.22</mockitoversion>
 	</properties>
 
 	<repositories>
@@ -73,6 +74,7 @@ under the License.
 			<version>${fpml-legal-version}</version>
 		</dependency>
 
+
 		<!-- Add connector dependencies here. They must be in the default scope (compile). -->
 
 		<!-- Example:
@@ -97,6 +99,30 @@ under the License.
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>3.0.2</version>
+			<scope>test</scope>
+		</dependency>
+		<!--<dependency>-->
+		<!--<groupId>io.cucumber</groupId>-->
+		<!--<artifactId>cucumber-spring</artifactId>-->
+		<!--<version>3.0.2</version>-->
+		<!--<scope>test</scope>-->
+		<!--</dependency>-->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>3.0.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockitoversion}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -9,7 +9,9 @@
 
     <packaging>pom</packaging>
 
-
+    <modules>
+        <module>flink-streamer-legal</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,6 +25,7 @@
 
         <revision>1.0.0</revision>
         <buildnumber>SNAPSHOT</buildnumber>
+
         <sha1/>
 
     </properties>
@@ -61,6 +64,9 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+    <dependencies>
+
+    </dependencies>
 
     <build>
         <plugins>
