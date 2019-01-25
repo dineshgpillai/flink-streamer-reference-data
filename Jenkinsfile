@@ -11,7 +11,7 @@ node {
            stage('Preparation') { // for display purposes
               // Get some code from a GitHub repository
               sh "sudo -i -u jenkins"
-               git 'ssh://git@github.com/dineshgpillai/mvn-docker-cd.git'
+               git 'ssh://git@github.com/dineshgpillai/flink-streamer-reference-data.git'
               // Get the Maven tool.
               // ** NOTE: This 'M3' Maven tool must be configured
               // **       in the global configuration.
