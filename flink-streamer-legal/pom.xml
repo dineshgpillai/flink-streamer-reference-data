@@ -20,9 +20,14 @@ under the License.
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<artifactId>flink-streamer-reference-data</artifactId>
+		<groupId>io.github.dineshgpillai</groupId>
+		<version>${revision}-${buildnumber}</version>
+	</parent>
+
 	<groupId>io.github.dineshgpillai</groupId>
 	<artifactId>flink-streamer-legal</artifactId>
-	<version>${revision}-${buildnumber}</version>
 	<packaging>jar</packaging>
 
 	<name>Flink Legal streamer job</name>
@@ -36,7 +41,6 @@ under the License.
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<fpml-legal-version>5.11.0-51</fpml-legal-version>
-		<mockitoversion>2.7.22</mockitoversion>
 	</properties>
 
 	<repositories>
@@ -88,42 +92,7 @@ under the License.
 
 		<!-- Add logging framework, to produce console output when running in the IDE. -->
 		<!-- These dependencies are excluded from the application JAR by default. -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.7</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-java</artifactId>
-			<version>3.0.2</version>
-			<scope>test</scope>
-		</dependency>
-		<!--<dependency>-->
-		<!--<groupId>io.cucumber</groupId>-->
-		<!--<artifactId>cucumber-spring</artifactId>-->
-		<!--<version>3.0.2</version>-->
-		<!--<scope>test</scope>-->
-		<!--</dependency>-->
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-junit</artifactId>
-			<version>3.0.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${mockitoversion}</version>
-			<scope>test</scope>
-		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -258,6 +227,59 @@ under the License.
 					<scope>compile</scope>
 				</dependency>
 			</dependencies>
+		</profile>
+		<profile>
+			<id>surefire</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.22.0</version>
+						<executions>
+							<execution>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<configuration>
+									<excludes>
+										<exclude>none</exclude>
+									</excludes>
+									<includes>
+										<include>**/LegalIntegrationTest</include>
+										<include>**/LegalIntegrationSteps</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>failsafe</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.22.0</version>
+						<configuration>
+							<includes>
+								<include>**/LegalIntegrationTest</include>
+								<include>**/LegalIntegrationSteps</include>
+							</includes>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 

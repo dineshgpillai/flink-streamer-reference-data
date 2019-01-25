@@ -9,14 +9,15 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PartySink extends RichSinkFunction<Party> {
+public class PartySink extends RichSinkFunction<List<Party>> {
 
     final static Logger LOG = LoggerFactory.getLogger(PartySink.class);
     public static final List<Party> values = new ArrayList<>();
 
     @Override
-    public synchronized void invoke(Party value) throws Exception {
-        values.add(value);
+    public synchronized void invoke(List<Party> value) throws Exception {
+        value.forEach(a-> values.add(a));
+
     }
 
 }

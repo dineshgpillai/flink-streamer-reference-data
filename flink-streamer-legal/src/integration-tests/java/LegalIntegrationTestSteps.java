@@ -44,7 +44,7 @@ public class LegalIntegrationTestSteps {
 
 
 
-    @Then("stores the legal documents to Hz which should contain {int} legal documents {int} Parties")
+    @Then("stores the legal documents to Hz which should contain {int} legal document {int} Parties")
     public void stores_the_legal_documents_to_Hz_which_should_contain_legal_documents_Parties(int legaldocumentcount, int partycount) throws Exception {
         // Write code here that turns the phrase above into concrete actions
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -52,7 +52,7 @@ public class LegalIntegrationTestSteps {
         env.setParallelism(1);
         // values are collected in a static variable
         DataStream<String> dataStream;
-        dataStream = env.readTextFile(sourcefile.getAbsolutePath());
+        dataStream = env.fromElements(sourcefile.getAbsolutePath());
         assert dataStream != null;
 
         LegalDocumentSink.values.clear();

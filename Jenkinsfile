@@ -17,24 +17,23 @@ node {
               // **       in the global configuration.
               mvnHome = tool 'Jenkins Maven'
               buildnumber = "${env.BUILD_NUMBER}"
-
-              sh "echo ${env.BUILD_NUMBER}"
-              sh "echo ${env.JAVA_HOME}"
            }
-           stage('Build SNAPSHOT') {
+           stage('Compile') {
               // Run the maven build
               if (isUnix()) {
-                 sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package deploy -Dbuildnumber=${buildnumber}-SNAPSHOT"
-              } else {
-                 bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
+                 sh "'${mvnHome}/bin/mvn' clean compile"
               }
            }
+           stage('Test Package and Deploy Snapshot') {
+             // Run the maven build
+             if (isUnix()) {
+                sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore verify package deploy -Psurefire -Dbuildnumber=${buildnumber}-SNAPSHOT"
+             }
+          }
            stage('Release') {
               if (isUnix()) {
-                       sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package deploy -Dbuildnumber=${buildnumber}"
-                    } else {
-                       bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
-                    }
+                       sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package deploy -Prelease -Dbuildnumber=${buildnumber}"
+               }
            }
        }
        catch (err) {

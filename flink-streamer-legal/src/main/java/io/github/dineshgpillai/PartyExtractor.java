@@ -5,9 +5,12 @@ import org.apache.flink.util.Collector;
 import org.fpml.legal.LegalDocument;
 import org.fpml.legal.Party;
 
-public class PartyExtractor extends ProcessFunction<LegalDocument, Party> {
+import java.util.List;
+
+public class PartyExtractor extends ProcessFunction<List<Party>, Party> {
     @Override
-    public void processElement(LegalDocument legalDocument, Context context, Collector<Party> collector) throws Exception {
+    public void processElement(List<Party> legalDocument, Context context, Collector<Party> collector) throws Exception {
+
 
     }
 }

@@ -4,26 +4,31 @@ import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.fpml.legal.LegalDocument;
+import org.fpml.legal.Party;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 
 public class LegalDocumentTransformer extends ProcessFunction<String, LegalDocument> {
 
-    final OutputTag<LegalDocument> outputTag = new OutputTag<LegalDocument>("party-stream") {
+    final OutputTag<List<Party>> outputTag = new OutputTag<List<Party>>("party-stream") {
     };
 
     @Override
     public void processElement(String s, ProcessFunction<String, LegalDocument>.Context ctx, Collector<LegalDocument> collector) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(LegalDocument.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(org.fpml.legal.LegalDocument.class);
 
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        InputStream targetStream = new ByteArrayInputStream(s.getBytes());
-        LegalDocument ld= (LegalDocument) jaxbUnmarshaller.unmarshal(targetStream);
+        JAXBElement<LegalDocument> obj= (JAXBElement) jaxbUnmarshaller.unmarshal(new File(s));
+
+        LegalDocument ld= obj.getValue();
         collector.collect(ld);
-        ctx.output(outputTag, ld);
+        ctx.output(outputTag, ld.getParty());
 
     }
 }

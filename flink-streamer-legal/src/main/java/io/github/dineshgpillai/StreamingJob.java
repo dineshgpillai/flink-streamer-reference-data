@@ -28,6 +28,8 @@ import org.fpml.legal.Party;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * Skeleton for a Flink Streaming Job.
  *
@@ -70,23 +72,25 @@ public class StreamingJob {
 
 		// execute program
 		LOG.info("starting up Streaming job...");
-		DataStream<String> dataStream = env.readTextFile(args[0]);
+		DataStream<String> dataStream = env.fromElements(args[0]);
 		StreamingJob job = new StreamingJob();
 		job.streamAndSink(dataStream, new LegalDocumentSink(), new PartySink());
 		env.execute("Flink Streaming Java API Skeleton");
+		assert LegalDocumentSink.values.size() > 0;
+		assert PartySink.values.size() > 0;
+
 		LOG.info("Done streaming");
 	}
 
 
-	public void streamAndSink(DataStream<String> stream, SinkFunction<LegalDocument> legalDocumentSink, SinkFunction<Party> partySink) {
+	public void streamAndSink(DataStream<String> stream, SinkFunction<LegalDocument> legalDocumentSink, SinkFunction<List<Party>> partySink) {
 		SingleOutputStreamOperator<LegalDocument> mainDataStream = stream.process(new LegalDocumentTransformer());
 		mainDataStream.addSink(legalDocumentSink);
 
-		final OutputTag<LegalDocument> outputTag = new OutputTag<LegalDocument>("party-stream") {
+		final OutputTag<List<Party>> outputTag = new OutputTag<List<Party>>("party-stream") {
 		};
 
-		DataStream<LegalDocument> sideOutputStream = mainDataStream.getSideOutput(outputTag);
-		SingleOutputStreamOperator<Party> partyStream = sideOutputStream.process(new PartyExtractor());
+		DataStream<List<Party>> partyStream = mainDataStream.getSideOutput(outputTag);
 		partyStream.addSink(partySink);
 
 	}
