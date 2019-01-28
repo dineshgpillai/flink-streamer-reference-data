@@ -124,4 +124,4 @@ else
 
 fi
 
-docker build --build-arg flink_dist="${FLINK_DIST}" --build-arg job_jar="${JOB_JAR_TARGET}" -t "${IMAGE_NAME}" .
+docker build -f flink-streamer-legal/Dockerfile --build-arg flink_dist="${FLINK_DIST}" --build-arg job_jar="${JOB_JAR_TARGET}" -t "${IMAGE_NAME}" .
