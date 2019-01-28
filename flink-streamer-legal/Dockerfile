@@ -43,10 +43,9 @@ RUN set -x && \
   chown -h flink:flink $FLINK_HOME
 
 COPY flink-streamer-legal/docker-entrypoint.sh /
+RUN chmod a+x /docker-entrypoint.sh
 
 USER flink
 EXPOSE 8081 6123
-
-RUN chmod a+x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["--help"]
