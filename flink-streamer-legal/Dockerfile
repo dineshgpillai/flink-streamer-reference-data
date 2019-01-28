@@ -43,6 +43,7 @@ RUN set -x && \
   chown -h flink:flink $FLINK_HOME
 
 COPY flink-streamer-legal/docker-entrypoint.sh /
+COPY flink-streamer-legal/src/integration-tests/resources/legal-documents/*.xml /
 RUN chmod a+x /docker-entrypoint.sh
 
 USER flink
