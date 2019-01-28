@@ -36,7 +36,7 @@ node {
 
 
 
-                sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.0-bin-hadoop28-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}"
+                sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.1-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}"
 
           }
           stage('Deploy approval'){
