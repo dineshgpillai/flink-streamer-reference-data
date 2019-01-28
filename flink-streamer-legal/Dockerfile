@@ -42,7 +42,7 @@ RUN set -x && \
   chown -R flink:flink $FLINK_INSTALL_PATH/flink-* && \
   chown -h flink:flink $FLINK_HOME
 
-COPY docker-entrypoint.sh /
+COPY flink-streamer-legal/docker-entrypoint.sh /
 
 USER flink
 EXPOSE 8081 6123
