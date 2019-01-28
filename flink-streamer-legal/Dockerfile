@@ -46,5 +46,7 @@ COPY flink-streamer-legal/docker-entrypoint.sh /
 
 USER flink
 EXPOSE 8081 6123
+
+RUN chmod a+x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["--help"]
