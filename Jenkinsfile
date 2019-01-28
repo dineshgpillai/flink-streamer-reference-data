@@ -6,6 +6,7 @@ node {
 
     env.JAVA_HOME="${tool 'Jenkins JDK'}"
     env.PATH="${env.JAVA_HOME}/bin:${env.PATH}:/usr/local/bin"
+    env.FLINK_DIST = "/Users/Shared/Jenkins/Download"
 
 
    try {
@@ -33,9 +34,9 @@ node {
           }
           stage('Docker build flink-streamer-legal'){
 
-                sh "cd flink-streamer-legal"
-                sh "pwd"
-                sh "./build.sh --from-release --flink-version 1.6.0 --hadoop-version 2.8 --scala-version 2.11 --job-jar target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}"
+
+
+                sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.0-bin-hadoop28-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}"
 
           }
           stage('Deploy approval'){
