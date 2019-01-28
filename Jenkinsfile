@@ -33,7 +33,8 @@ node {
           }
           stage('Docker build flink-streamer-legal'){
 
-                ./build.sh --from-release --flink-version 1.6.0 --hadoop-version 2.8 --scala-version 2.11 --job-jar target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}
+                sh "cd flink-streamer-legal"
+                sh "./build.sh --from-release --flink-version 1.6.0 --hadoop-version 2.8 --scala-version 2.11 --job-jar target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}"
 
           }
           stage('Deploy approval'){
