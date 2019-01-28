@@ -6,7 +6,7 @@ node {
 
     env.JAVA_HOME="${tool 'Jenkins JDK'}"
     env.PATH="${env.JAVA_HOME}/bin:${env.PATH}:/usr/local/bin"
-    env.FLINK_DIST = "/Users/Shared/Jenkins/Download"
+    env.FLINK_DIST = "/Users/Shared/Jenkins/Downloads"
 
 
    try {
