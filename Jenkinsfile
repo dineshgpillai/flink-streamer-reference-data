@@ -5,7 +5,8 @@ node {
    def buildnumber
 
     env.JAVA_HOME="${tool 'Jenkins JDK'}"
-    env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
+    env.PATH="${env.JAVA_HOME}/bin:${env.PATH}:/usr/local/bin"
+
 
    try {
            stage('Preparation') { // for display purposes
@@ -30,7 +31,15 @@ node {
                 sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore verify package deploy -Psurefire -Dbuildnumber=${buildnumber}-SNAPSHOT"
              }
           }
-           stage('Release') {
+          stage('Docker build flink-streamer-legal'){
+
+                ./build.sh --from-release --flink-version 1.6.0 --hadoop-version 2.8 --scala-version 2.11 --job-jar target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}
+
+          }
+          stage('Deploy approval'){
+              input "Deploy to prod?"
+          }
+          stage('Release') {
               if (isUnix()) {
                        sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package deploy -Prelease -Dbuildnumber=${buildnumber}"
                }
