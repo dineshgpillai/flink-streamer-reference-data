@@ -34,6 +34,7 @@ node {
           stage('Docker build flink-streamer-legal'){
 
                 sh "cd flink-streamer-legal"
+                sh "pwd"
                 sh "./build.sh --from-release --flink-version 1.6.0 --hadoop-version 2.8 --scala-version 2.11 --job-jar target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}"
 
           }
