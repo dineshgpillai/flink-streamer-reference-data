@@ -34,9 +34,8 @@ node {
           }
           stage('Docker build and push flink-streamer-legal'){
 
-
-                sh "docker login -u dineshpillai -p Pill2017"
                 sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.1-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name dineshpillai/flink-streamer-legal-${buildnumber}"
+                sh "docker login -u dineshpillai -p Pill2017"
                 sh "docker push dineshpillai/flink-streamer-legal-${buildnumber}"
           }
           stage ('Docker test'){
