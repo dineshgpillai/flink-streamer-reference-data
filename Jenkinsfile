@@ -32,16 +32,18 @@ node {
                 sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore verify package deploy -Psurefire -Dbuildnumber=${buildnumber}-SNAPSHOT"
              }
           }
-          stage('Docker build flink-streamer-legal'){
+          stage('Docker build and push flink-streamer-legal'){
 
 
-
-                sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.1-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}"
-
+                sh "docker login -u dineshpillai -p Pill2017"
+                sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.1-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name dineshpillai/flink-streamer-legal-${buildnumber}"
+                sh "docker push dineshpillai/flink-streamer-legal-${buildnumber}
           }
-          stage ('Docker test and push Image'){
+          stage ('Docker test'){
 
-                sh "FLINK_DOCKER_IMAGE_NAME=flink-streamer-legal-${buildnumber} FLINK_JOB=io.github.dineshgpillai.StreamingJob FLINK_JOB_ARGUMENTS=/legal-ex12-scsa-2014-new-york.xml  docker-compose -f flink-streamer-legal/docker-compose.yml up"
+                sh "FLINK_DOCKER_IMAGE_NAME=dineshpillai/flink-streamer-legal-${buildnumber} FLINK_JOB=io.github.dineshgpillai.StreamingJob FLINK_JOB_ARGUMENTS=/legal-ex12-scsa-2014-new-york.xml  docker-compose -f flink-streamer-legal/docker-compose.yml up"
+
+
           }
           stage('Deploy approval'){
               input "Deploy to prod?"
