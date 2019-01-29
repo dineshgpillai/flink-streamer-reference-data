@@ -41,7 +41,7 @@ node {
           }
           stage ('Docker test and push Image'){
 
-                sh "FLINK_DOCKER_IMAGE_NAME=flink-streamer-legal-${buildnumber} FLINK_JOB=io.github.dineshgpillai.StreamingJob FLINK_JOB_ARGUMENTS=/legal-ex12-scsa-2014-new-york.xml  docker-compose up"
+                sh "FLINK_DOCKER_IMAGE_NAME=flink-streamer-legal-${buildnumber} FLINK_JOB=io.github.dineshgpillai.StreamingJob FLINK_JOB_ARGUMENTS=/legal-ex12-scsa-2014-new-york.xml  docker-compose -f flink-streamer-legal/docker-compose.yml up"
           }
           stage('Deploy approval'){
               input "Deploy to prod?"
