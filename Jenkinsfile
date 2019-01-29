@@ -7,6 +7,7 @@ node {
     env.JAVA_HOME="${tool 'Jenkins JDK'}"
     env.PATH="${env.JAVA_HOME}/bin:${env.PATH}:/usr/local/bin"
     env.FLINK_DIST = "/Users/Shared/Jenkins/Downloads"
+    env.DOCKER_USER="dineshpillai"
 
 
    try {
@@ -35,7 +36,7 @@ node {
           stage('Docker build and push flink-streamer-legal'){
 
                 sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.1-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name dineshpillai/flink-streamer-legal-${buildnumber}"
-                sh "docker login -u dineshpillai -p Pill2017"
+                sh "cat ~/mypassword.txt|docker login --username $DOCKER_USER --password-stdin"
                 sh "docker push dineshpillai/flink-streamer-legal-${buildnumber}"
           }
           stage ('Docker test'){
