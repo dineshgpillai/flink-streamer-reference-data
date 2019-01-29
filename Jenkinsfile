@@ -39,6 +39,10 @@ node {
                 sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.1-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name flink-streamer-legal-${buildnumber}"
 
           }
+          stage ('Docker test and push Image'){
+
+                sh "FLINK_DOCKER_IMAGE_NAME=flink-streamer-legal-${buildnumber} FLINK_JOB=io.github.dineshgpillai.StreamingJob FLINK_JOB_ARGUMENTS=/legal-ex12-scsa-2014-new-york.xml  docker-compose up"
+          }
           stage('Deploy approval'){
               input "Deploy to prod?"
           }
