@@ -52,8 +52,8 @@ node {
                 sh "FLINK_IMAGE_NAME=dineshpillai/flink-streamer-legal:${buildnumber} FLINK_JOB=io.github.dineshgpillai.StreamingJob FLINK_JOB_ARGUMENTS=/legal-ex12-scsa-2014-new-york.xml FLINK_JOB_PARALLELISM=1"
 
                 //subst
-                sh "envsubst < "flink-streamer-legal/manifests/job-cluster-job-template.yaml" > "flink-streamer-legal/manifests/job-cluster-job.yaml"
-                sh "envsubst < "flink-streamer-legal/manifests/task-manager-deployment-template.yaml" > "flink-streamer-legal/manifests/task-manager-deployment.yaml"
+                sh "envsubst < \"flink-streamer-legal/manifests/job-cluster-job-template.yaml\" > \"flink-streamer-legal/manifests/job-cluster-job.yaml\""
+                sh "envsubst < \"flink-streamer-legal/manifests/task-manager-deployment-template.yaml\" > \"flink-streamer-legal/manifests/task-manager-deployment.yaml\""
 
           }
           stage('Deploy approval'){
