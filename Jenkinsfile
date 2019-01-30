@@ -12,9 +12,11 @@ node {
 
    try {
            stage('Preparation') { // for display purposes
+
               // Get some code from a GitHub repository
               sh "sudo -i -u jenkins"
-               git 'ssh://git@github.com/dineshgpillai/flink-streamer-reference-data.git'
+              git 'ssh://git@github.com/dineshgpillai/flink-streamer-reference-data.git'
+
               // Get the Maven tool.
               // ** NOTE: This 'M3' Maven tool must be configured
               // **       in the global configuration.
@@ -35,13 +37,13 @@ node {
           }
           stage('Docker build and push flink-streamer-legal'){
 
-                sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.1-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name dineshpillai/flink-streamer-legal-${buildnumber}"
+                sh "flink-streamer-legal/build.sh --from-archive ${env.FLINK_DIST}/flink-1.7.1-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name dineshpillai/flink-streamer-legal:${buildnumber}"
                 sh "cat ~/mypassword.txt|docker login --username $DOCKER_USER --password-stdin"
-                sh "docker push dineshpillai/flink-streamer-legal-${buildnumber}"
+                sh "docker push dineshpillai/flink-streamer-legal:${buildnumber}"
           }
           stage ('Docker test'){
 
-                sh "FLINK_DOCKER_IMAGE_NAME=dineshpillai/flink-streamer-legal-${buildnumber} FLINK_JOB=io.github.dineshgpillai.StreamingJob FLINK_JOB_ARGUMENTS=/legal-ex12-scsa-2014-new-york.xml  docker-compose -f flink-streamer-legal/docker-compose.yml up"
+                sh "FLINK_DOCKER_IMAGE_NAME=dineshpillai/flink-streamer-legal:${buildnumber} FLINK_JOB=io.github.dineshgpillai.StreamingJob FLINK_JOB_ARGUMENTS=/legal-ex12-scsa-2014-new-york.xml  docker-compose -f flink-streamer-legal/docker-compose.yml up"
 
 
           }
