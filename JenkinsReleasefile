@@ -1,0 +1,95 @@
+#!groovy
+
+node {
+   def mvnHome
+   def buildnumber
+
+    env.JAVA_HOME="${tool 'Jenkins JDK'}"
+    env.PATH="${env.JAVA_HOME}/bin:${env.PATH}:/usr/local/bin"
+    env.FLINK_DIST = "/Users/Shared/Jenkins/Downloads"
+    env.DOCKER_USER="dineshpillai"
+
+    buildnumber = "${env.BUILD_NUMBER}"
+
+
+
+
+   try {
+
+         codeCheckout()
+         runTests()
+         release( buildnumber, "1.0")
+
+
+       }
+       catch (err) {
+
+               currentBuild.result = "FAILURE"
+
+                   //mail body: "project build error is here: ${env.BUILD_URL}" ,
+                   //from: 'dinesh.g.pillai@gmail.com',
+                   //replyTo: 'dinesh.g.pillai@gmail.com',
+                   //subject: 'project build failed',
+
+               throw err
+           }
+}
+
+def codeCheckout(){
+    stage('code checkout'){
+        sh "sudo -i -u jenkins"
+        git 'ssh://git@github.com/dineshgpillai/flink-streamer-reference-data.git'
+        echo "GIT_COMMIT ${env.GIT_COMMIT}"
+    }
+
+}
+
+def release(String buildnumber, String releaseversion){
+
+         //create branch
+
+           echo "building with $buildnumber and $releaseversion"
+           sh "git tag  -a release/$releaseversion-rc-$buildnumber"
+
+
+
+
+
+}
+
+def runTests(){
+    stage 'Unit tests'
+    mvn 'test -B -Dmaven.javadoc.skip=true -Dcheckstyle.skip=true'
+    if (currentBuild.result == "UNSTABLE") {
+        sh "exit 1"
+    }
+}
+
+def mvn(args) {
+
+        mvnHome = tool 'Jenkins Maven'
+        // Run the maven build
+        sh "${mvnHome}/bin/mvn $args -Dmaven.test.failure.ignore"
+
+}
+
+def play(){
+
+        stage('Example') {
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                submitter "alice,bob"
+                parameters {
+                    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+                }
+            }
+            steps {
+                echo "Hello, ${PERSON}, nice to meet you."
+            }
+        }
+
+
+
+}
+
