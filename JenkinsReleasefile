@@ -17,7 +17,9 @@ node {
    try {
 
          codeCheckout()
-         runTests()
+         //runTests()
+         //play()
+
          release( buildnumber, "1.0")
 
 
@@ -46,10 +48,19 @@ def codeCheckout(){
 
 def release(String buildnumber, String releaseversion){
 
-         //create branch
 
            echo "building with $buildnumber and $releaseversion"
-           sh "git tag  -a release/$releaseversion-rc-$buildnumber"
+
+            //get the commit and it to the tag comment
+           gitCommit=sh('git rev-parse HEAD')
+           echo "git commit is $gitCommit"
+
+            //thanks to http://lucaslegoff.com/post/git-tag-jenkins2-pipeline
+            //but had to set the ~/.gitconfig file for it to work
+           sshagent(credentials:['dineshgithubsshkey']) {
+                sh('git tag  -a v2.3.0 -m "testing git tag"')
+                sh("git push  --tags")
+            }
 
 
 
