@@ -7,7 +7,7 @@ metadata:
 parameters:
   - description: Flink Image to use from build
     name: FLINK_IMAGE_NAME
-    value: dineshpillai/flink-streamer-legal:latest
+    value: dineshpillai/flink-streamer-legal:39
     required: true
   - description: Name of the Flink Job class
     name:  FLINK_JOB
