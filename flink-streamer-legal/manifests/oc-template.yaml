@@ -83,8 +83,8 @@ objects:
           containers:
             - name: flink-job-cluster
               image: ${FLINK_IMAGE_NAME}
-              args: ["job-cluster", "--job-classname", ${FLINK_JOB}, "-Djobmanager.rpc.address=flink-job-cluster",
-                     "-Dparallelism.default="${FLINK_JOB_PARALLELISM}, "-Dblob.server.port=6124", "-Dquery.server.ports=6125", ${FLINK_JOB_ARGUMENTS}]
+              args: ["job-cluster", "--job-classname", "${FLINK_JOB}", "-Djobmanager.rpc.address=flink-job-cluster",
+                     "-Dparallelism.default=${FLINK_JOB_PARALLELISM}", "-Dblob.server.port=6124", "-Dquery.server.ports=6125", "${FLINK_JOB_ARGUMENTS}"]
               ports:
                 - containerPort: 6123
                   name: rpc
