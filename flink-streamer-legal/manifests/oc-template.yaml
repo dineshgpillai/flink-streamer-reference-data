@@ -15,7 +15,7 @@ parameters:
     required: true
   - description: Number of parallels to run
     name: FLINK_JOB_PARALLELISM
-    value: 1
+    value: 2
     required: true
   - description: The arguments to pass in
     name: FLINK_JOB_ARGUMENTS
@@ -23,51 +23,6 @@ parameters:
     required: true
 
 objects:
-#  - apiVersion: v1
-#    kind: BuildConfig
-#    metadata:
-#      annotations:
-#        openshift.io/generated-by: OpenShiftWebConsole
-#      creationTimestamp: null
-#      labels:
-#        app: country-service
-#        delete: blog
-#      name: country-service
-#    spec:
-#      output:
-#        to:
-#          kind: ImageStreamTag
-#          name: country-service:latest
-#      postCommit: {}
-#      resources: {}
-#      runPolicy: Serial
-#      source:
-#        git:
-#          ref: ${SOURCE_REF}
-#          uri: ${SOURCE_REPOSITORY}
-#        type: Git
-#      strategy:
-#        sourceStrategy:
-#          env:
-#            - name: MAVEN_ARGS_APPEND
-#              value: -pl fis --also-make
-#            - name: ARTIFACT_DIR
-#              value: fis/target/
-#            - name: MODULE_DIR
-#              value: fis
-#          from:
-#            kind: ImageStreamTag
-#            name: fis-java-openshift:latest
-#            namespace: openshift
-#        type: Source
-#      triggers:
-#        - imageChange: {}
-#          type: ImageChange
-#        - type: ConfigChange
-#    status: {}
-
-
-
   - apiVersion: batch/v1
     kind: Job
     metadata:
