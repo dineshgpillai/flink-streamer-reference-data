@@ -5,184 +5,138 @@ metadata:
   name: multi-module-example
 
 parameters:
-  - description: Git Source Repository
-    name: SOURCE_REPOSITORY
-    value: https://github.com/benemon/multi-module-s2i-project
+  - description: Flink Image to use from build
+    name: FLINK_IMAGE_NAME
+    value: dineshpillai/flink-streamer-legal:latest
     required: true
-  - description: Git Source reference
-    name: SOURCE_REF
-    value: b1.0
+  - description: Name of the Flink Job class
+    name:  FLINK_JOB
+    value: io.github.dineshgpillai.StreamingJob
     required: true
-  - description: Country Service data directory
-    name: DATA_DIRECTORY
-    value: /deployments/data
+  - description: Number of parallels to run
+    name: FLINK_JOB_PARALLELISM
+    value: 1
+    required: true
+  - description: The arguments to pass in
+    name: FLINK_JOB_ARGUMENTS
+    value: /legal-ex12-scsa-2014-new-york.xml
     required: true
 
 objects:
-  - apiVersion: v1
-    kind: BuildConfig
+#  - apiVersion: v1
+#    kind: BuildConfig
+#    metadata:
+#      annotations:
+#        openshift.io/generated-by: OpenShiftWebConsole
+#      creationTimestamp: null
+#      labels:
+#        app: country-service
+#        delete: blog
+#      name: country-service
+#    spec:
+#      output:
+#        to:
+#          kind: ImageStreamTag
+#          name: country-service:latest
+#      postCommit: {}
+#      resources: {}
+#      runPolicy: Serial
+#      source:
+#        git:
+#          ref: ${SOURCE_REF}
+#          uri: ${SOURCE_REPOSITORY}
+#        type: Git
+#      strategy:
+#        sourceStrategy:
+#          env:
+#            - name: MAVEN_ARGS_APPEND
+#              value: -pl fis --also-make
+#            - name: ARTIFACT_DIR
+#              value: fis/target/
+#            - name: MODULE_DIR
+#              value: fis
+#          from:
+#            kind: ImageStreamTag
+#            name: fis-java-openshift:latest
+#            namespace: openshift
+#        type: Source
+#      triggers:
+#        - imageChange: {}
+#          type: ImageChange
+#        - type: ConfigChange
+#    status: {}
+
+
+
+  - apiVersion: batch/v1
+    kind: Job
     metadata:
-      annotations:
-        openshift.io/generated-by: OpenShiftWebConsole
-      creationTimestamp: null
-      labels:
-        app: country-service
-        delete: blog
-      name: country-service
+      name: flink-job-cluster
     spec:
-      output:
-        to:
-          kind: ImageStreamTag
-          name: country-service:latest
-      postCommit: {}
-      resources: {}
-      runPolicy: Serial
-      source:
-        git:
-          ref: ${SOURCE_REF}
-          uri: ${SOURCE_REPOSITORY}
-        type: Git
-      strategy:
-        sourceStrategy:
-          env:
-            - name: MAVEN_ARGS_APPEND
-              value: -pl fis --also-make
-            - name: ARTIFACT_DIR
-              value: fis/target/
-            - name: MODULE_DIR
-              value: fis
-          from:
-            kind: ImageStreamTag
-            name: fis-java-openshift:latest
-            namespace: openshift
-        type: Source
-      triggers:
-        - imageChange: {}
-          type: ImageChange
-        - type: ConfigChange
-    status: {}
-
-
-
-  - apiVersion: v1
-    kind: DeploymentConfig
-    metadata:
-      annotations:
-        openshift.io/generated-by: OpenShiftWebConsole
-      creationTimestamp: null
-      labels:
-        app: country-service
-        delete: blog
-      name: country-service
-    spec:
-      replicas: 1
-      selector:
-        deploymentconfig: country-service
-      strategy:
-        resources: {}
-        rollingParams:
-          intervalSeconds: 1
-          maxSurge: 25%
-          maxUnavailable: 25%
-          timeoutSeconds: 600
-          updatePeriodSeconds: 1
-        type: Rolling
       template:
         metadata:
-          creationTimestamp: null
           labels:
-            app: country-service
-            delete: blog
-            deploymentconfig: country-service
+            app: flink
+            component: job-cluster
         spec:
+          restartPolicy: OnFailure
           containers:
-            - env:
-                - name: DATA_DIRECTORY
-                  value: ${DATA_DIRECTORY}
-              image: country-service
-              imagePullPolicy: Always
-              name: country-service
+            - name: flink-job-cluster
+              image: ${FLINK_IMAGE_NAME}
+              args: ["job-cluster", "--job-classname", ${FLINK_JOB}, "-Djobmanager.rpc.address=flink-job-cluster",
+                     "-Dparallelism.default="${FLINK_JOB_PARALLELISM}, "-Dblob.server.port=6124", "-Dquery.server.ports=6125", ${FLINK_JOB_ARGUMENTS}]
               ports:
-                - containerPort: 8778
-                  name: jolokia
-                  protocol: TCP
-                - containerPort: 8080
-                  name: http
-                  protocol: TCP
-              resources:
-                limits:
-                  cpu: 500m
-                  memory: 384Mi
-                requests:
-                  cpu: 250m
-                  memory: 128Mi
-              terminationMessagePath: /dev/termination-log
-          dnsPolicy: ClusterFirst
-          restartPolicy: Always
-          securityContext: {}
-          terminationGracePeriodSeconds: 30
-      test: false
-      triggers:
-        - imageChangeParams:
-            automatic: true
-            containerNames:
-              - country-service
-            from:
-              kind: ImageStreamTag
-              name: country-service:latest
-          type: ImageChange
-        - type: ConfigChange
-    status: {}
+                - containerPort: 6123
+                  name: rpc
+                - containerPort: 6124
+                  name: blob
+                - containerPort: 6125
+                  name: query
+                - containerPort: 8081
+                  name: ui
 
-
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      annotations:
-        openshift.io/generated-by: OpenShiftWebConsole
-      creationTimestamp: null
-      labels:
-        app: country-service
-        delete: blog
-      name: country-service
-    spec:
-      tags:
-        - annotations: null
-          from:
-            kind: DockerImage
-            name: country-service:latest
-          generation: null
-          importPolicy: {}
-          name: latest
-    status: {}
 
 
   - apiVersion: v1
     kind: Service
     metadata:
-      annotations:
-        openshift.io/generated-by: OpenShiftWebConsole
-      creationTimestamp: null
+      name: flink-job-cluster
       labels:
-        app: country-service
-        delete: blog
-      name: country-service
+        app: flink
+        component: job-cluster
     spec:
       ports:
-        - name: 8080-tcp
-          port: 8080
-          protocol: TCP
-          targetPort: 8080
-        - name: 8778-tcp
-          port: 8778
-          protocol: TCP
-          targetPort: 8778
+        - name: rpc
+          port: 6123
+        - name: blob
+          port: 6124
+        - name: query
+          port: 6125
+          nodePort: 30025
+        - name: ui
+          port: 8081
+          nodePort: 30081
+      type: NodePort
       selector:
-        deploymentconfig: country-service
-      sessionAffinity: None
-      type: ClusterIP
-    status:
-      loadBalancer: {}
+        app: flink
+        component: job-cluster
+
+  - apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      name: flink-task-manager
+    spec:
+      replicas: ${FLINK_JOB_PARALLELISM}
+      template:
+        metadata:
+          labels:
+            app: flink
+            component: task-manager
+        spec:
+          containers:
+            - name: flink-task-manager
+              image: ${FLINK_IMAGE_NAME}
+              args: ["task-manager", "-Djobmanager.rpc.address=flink-job-cluster"]
 
 
 
