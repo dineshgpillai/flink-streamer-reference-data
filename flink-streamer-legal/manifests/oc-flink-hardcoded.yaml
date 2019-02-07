@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: multi-module-example
+
+parameters:
+  - description: Flink Image to use from build
+    name: FLINK_IMAGE_NAME
+    value: dineshpillai/flink-streamer-legal:39
+    required: true
+  - description: Name of the Flink Job class
+    name:  FLINK_JOB
+    value: io.github.dineshgpillai.StreamingJob
+    required: true
+  - description: Number of parallels to run
+    name: FLINK_JOB_PARALLELISM
+    value: "2"
+    required: true
+  - description: The arguments to pass in
+    name: FLINK_JOB_ARGUMENTS
+    value: /legal-ex12-scsa-2014-new-york.xml
+    required: true
+
+objects:
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: flink-job-cluster
+    spec:
+      template:
+        metadata:
+          labels:
+            app: flink
+            component: job-cluster
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: flink-job-cluster
+              image: ${FLINK_IMAGE_NAME}
+              args: ["job-cluster", "--job-classname", "${FLINK_JOB}", "-Djobmanager.rpc.address=flink-job-cluster",
+                     "-Dparallelism.default=${FLINK_JOB_PARALLELISM}", "-Dblob.server.port=6124", "-Dquery.server.ports=6125", "${FLINK_JOB_ARGUMENTS}"]
+              ports:
+                - containerPort: 6123
+                  name: rpc
+                - containerPort: 6124
+                  name: blob
+                - containerPort: 6125
+                  name: query
+                - containerPort: 8081
+                  name: ui
+
+
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: flink-job-cluster
+      labels:
+        app: flink
+        component: job-cluster
+    spec:
+      ports:
+        - name: rpc
+          port: 6123
+        - name: blob
+          port: 6124
+        - name: query
+          port: 6125
+          nodePort: 30025
+        - name: ui
+          port: 8081
+          nodePort: 30081
+      type: NodePort
+      selector:
+        app: flink
+        component: job-cluster
+
+  - apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      name: flink-task-manager
+    spec:
+      replicas: ${FLINK_JOB_PARALLELISM}
+      template:
+        metadata:
+          labels:
+            app: flink
+            component: task-manager
+        spec:
+          containers:
+            - name: flink-task-manager
+              image: ${FLINK_IMAGE_NAME}
+              args: ["task-manager", "-Djobmanager.rpc.address=flink-job-cluster"]
+
+
+
