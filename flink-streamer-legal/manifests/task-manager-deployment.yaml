@@ -32,6 +32,6 @@ spec:
       - name: flink-task-manager
         image: dineshpillai/flink-streamer-legal:39
         args: ["task-manager"]
-      env:
-      - name:  JOB_MANAGER_RPC_ADDRESS
-        value: flink-job-cluster
+        env:
+        - name:  JOB_MANAGER_RPC_ADDRESS
+          value: flink-job-cluster
