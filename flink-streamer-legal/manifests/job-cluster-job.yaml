@@ -37,7 +37,7 @@ spec:
         - name:  JOB_MANAGER_RPC_ADDRESS
           value: flink-job-cluster
         - name:  parallelism.default
-          value: 1
+          value: "1"
         args: ["job-cluster", "--job-classname", "io.github.dineshgpillai.StreamingJob",  "/legal-ex12-scsa-2014-new-york.xml"]
         ports:
         - containerPort: 6123
