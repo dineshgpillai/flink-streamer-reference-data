@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: flink-task-manager
-        image: ${FLINK_IMAGE_NAME}
+        image: dineshpillai/flink-streamer-legal:39
         args: ["task-manager"]
       env:
       - name:  JOB_MANAGER_RPC_ADDRESS

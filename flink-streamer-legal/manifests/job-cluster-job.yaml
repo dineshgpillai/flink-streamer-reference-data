@@ -30,7 +30,7 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: flink-job-cluster
-        image: ${FLINK_IMAGE_NAME}
+        image: dineshpillai/flink-streamer-legal:39
         env:
         - name:  JOB_MANAGER_RPC_ADDRESS
           value: flink-job-cluster
