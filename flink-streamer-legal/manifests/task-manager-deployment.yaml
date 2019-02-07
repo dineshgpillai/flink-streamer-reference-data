@@ -29,9 +29,6 @@ spec:
         component: task-manager
     spec:
       containers:
-      - name: flink-task-manager
-        image: dineshpillai/flink-streamer-legal:39
-        args: ["task-manager"]
-        env:
-        - name:  JOB_MANAGER_RPC_ADDRESS
-          value: flink-job-cluster
+        - name: flink-task-manager
+          image: dineshpillai/flink-streamer-legal:39
+          args: ["task-manager", "-Djobmanager.rpc.address=flink-job-cluster"]
