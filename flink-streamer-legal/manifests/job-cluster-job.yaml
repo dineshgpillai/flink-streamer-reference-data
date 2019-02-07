@@ -16,7 +16,7 @@
 # limitations under the License.
 ################################################################################
 
-apiVersion: batch/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: flink-job-cluster
