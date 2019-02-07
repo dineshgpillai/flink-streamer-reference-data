@@ -27,7 +27,7 @@ spec:
         app: flink
         component: job-cluster
     spec:
-      restartPolicy: OnFailure
+      restartPolicy: Always
       containers:
       - name: flink-job-cluster
         image: "dineshpillai/flink-streamer-legal:39"
