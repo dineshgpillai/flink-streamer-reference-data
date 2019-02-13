@@ -21,8 +21,59 @@ parameters:
     name: FLINK_JOB_ARGUMENTS
     value: /legal-ex12-scsa-2014-new-york.xml
     required: true
+  - description: Git Source Repository
+    name: SOURCE_REPOSITORY
+    value: https://github.com/dineshgpillai/flink-streamer-reference-data
+    required: true
+  - description: Git Source reference
+    name: SOURCE_REF
+    value: b1.0
+    required: true
 
 objects:
+  - apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: null
+    labels:
+      app: flink
+      delete: blog
+    name: flink-job-cluster
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: dineshpillai/flink-streamer-legal:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        ref: ${SOURCE_REF}
+        uri: ${SOURCE_REPOSITORY}
+      type: Git
+      contextDir: "flink-streamer-reference-data/flink-streamer-legal"
+    strategy:
+      sourceStrategy:
+        env:
+        - name: MAVEN_ARGS_APPEND
+          value: -pl fis --also-make
+        - name: ARTIFACT_DIR
+          value: flink-streamer-legal/target/
+        - name: MODULE_DIR
+          value: flink-streamer-legal
+        # from:
+        #   kind: ImageStreamTag
+        #   name: fis-java-openshift:latest
+        #   namespace: openshift
+      type: Source
+    triggers:
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
+  status: {}
   - apiVersion: batch/v1
     kind: Job
     metadata:
@@ -92,6 +143,3 @@ objects:
             - name: flink-task-manager
               image: ${FLINK_IMAGE_NAME}
               args: ["task-manager", "-Djobmanager.rpc.address=flink-job-cluster"]
-
-
-
