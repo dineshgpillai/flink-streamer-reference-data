@@ -32,48 +32,48 @@ parameters:
 
 objects:
   - apiVersion: v1
-  kind: BuildConfig
-  metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftWebConsole
-    creationTimestamp: null
-    labels:
-      app: flink
-      delete: blog
-    name: flink-job-cluster
-  spec:
-    output:
-      to:
-        kind: ImageStreamTag
-        name: dineshpillai/flink-streamer-legal:latest
-    postCommit: {}
-    resources: {}
-    runPolicy: Serial
-    source:
-      git:
-        ref: ${SOURCE_REF}
-        uri: ${SOURCE_REPOSITORY}
-      type: Git
-      contextDir: "flink-streamer-reference-data/flink-streamer-legal"
-    strategy:
-      sourceStrategy:
-        env:
-        - name: MAVEN_ARGS_APPEND
-          value: -pl fis --also-make
-        - name: ARTIFACT_DIR
-          value: flink-streamer-legal/target/
-        - name: MODULE_DIR
-          value: flink-streamer-legal
-        # from:
-        #   kind: ImageStreamTag
-        #   name: fis-java-openshift:latest
-        #   namespace: openshift
-      type: Source
-    triggers:
-    - imageChange: {}
-      type: ImageChange
-    - type: ConfigChange
-  status: {}
+    kind: BuildConfig
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+      creationTimestamp: null
+      labels:
+        app: flink
+        delete: blog
+      name: flink-job-cluster
+    spec:
+      output:
+        to:
+          kind: ImageStreamTag
+          name: dineshpillai/flink-streamer-legal:latest
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        git:
+          ref: ${SOURCE_REF}
+          uri: ${SOURCE_REPOSITORY}
+        type: Git
+        contextDir: "flink-streamer-reference-data/flink-streamer-legal"
+      strategy:
+        sourceStrategy:
+          env:
+          - name: MAVEN_ARGS_APPEND
+            value: -pl fis --also-make
+          - name: ARTIFACT_DIR
+            value: flink-streamer-legal/target/
+          - name: MODULE_DIR
+            value: flink-streamer-legal
+          # from:
+          #   kind: ImageStreamTag
+          #   name: fis-java-openshift:latest
+          #   namespace: openshift
+        type: Source
+      triggers:
+      - imageChange: {}
+        type: ImageChange
+      - type: ConfigChange
+    status: {}
   - apiVersion: batch/v1
     kind: Job
     metadata:
