@@ -66,7 +66,7 @@ objects:
             value: flink-streamer-legal
           from:
             kind: ImageStreamTag
-          #   name: fis-java-openshift:latest
+            name: dineshpillai/flink-streamer-legal:latest
           #   namespace: openshift
         type: Source
       triggers:
