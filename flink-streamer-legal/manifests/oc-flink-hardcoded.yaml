@@ -64,8 +64,8 @@ objects:
             value: flink-streamer-legal/target/
           - name: MODULE_DIR
             value: flink-streamer-legal
-          # from:
-          #   kind: ImageStreamTag
+          from:
+            kind: ImageStreamTag
           #   name: fis-java-openshift:latest
           #   namespace: openshift
         type: Source
