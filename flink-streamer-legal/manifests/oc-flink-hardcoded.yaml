@@ -59,7 +59,7 @@ objects:
         type: Docker
         dockerStrategy:
           from:
-            kind: ImageStreamTag,
+            kind: ImageStreamTag
             name: java:8-jre-alpine:latest
 
       # strategy:
