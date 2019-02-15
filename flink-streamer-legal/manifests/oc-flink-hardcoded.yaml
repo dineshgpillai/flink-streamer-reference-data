@@ -60,7 +60,7 @@ objects:
         dockerStrategy:
           from:
             kind: ImageStreamTag,
-            name: dineshpillai/flink-streamer-legal:39
+            name: java:8-jre-alpine
 
       # strategy:
       #   sourceStrategy:
