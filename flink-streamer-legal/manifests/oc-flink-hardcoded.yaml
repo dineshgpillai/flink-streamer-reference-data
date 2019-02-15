@@ -27,7 +27,7 @@ parameters:
     required: true
   - description: Git Source reference
     name: SOURCE_REF
-    value: b1.0
+    value: master
     required: true
 
 objects:
@@ -56,18 +56,25 @@ objects:
         type: Git
         contextDir: "flink-streamer-reference-data/flink-streamer-legal"
       strategy:
-        sourceStrategy:
-          env:
-          - name: MAVEN_ARGS_APPEND
-            value: -pl fis --also-make
-          - name: ARTIFACT_DIR
-            value: flink-streamer-legal/target/
-          - name: MODULE_DIR
-            value: flink-streamer-legal
+        type: Docker
+        dockerStrategy:
           from:
-            kind: ImageStreamTag
-            name: dineshpillai/flink-streamer-legal:latest
-          #   namespace: openshift
+            kind: ImageStreamTag,
+            name: dineshpillai/flink-streamer-legal:39
+
+      # strategy:
+      #   sourceStrategy:
+      #     env:
+      #     - name: MAVEN_ARGS_APPEND
+      #       value: -pl fis --also-make
+      #     - name: ARTIFACT_DIR
+      #       value: flink-streamer-legal/target/
+      #     - name: MODULE_DIR
+      #       value: flink-streamer-legal
+      #     from:
+      #       kind: ImageStreamTag
+      #       name: dineshpillai/flink-streamer-legal:latest
+      #     #   namespace: openshift
         type: Source
       triggers:
       - imageChange: {}
