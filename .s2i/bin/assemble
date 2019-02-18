@@ -1,1 +1,11 @@
+#!/bin/bash
+set -eo pipefail
+
+S2I_SCRIPT_DIR="/usr/local/s2i"
+S2I_SOURCE_DIR="/tmp/src"
+
+cp -R ${S2I_SOURCE_DIR} /opt/app-root
+
+cd /opt/app-root/src
+
 mvn clean package
