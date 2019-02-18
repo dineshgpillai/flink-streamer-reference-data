@@ -1,8 +1,13 @@
 FROM openshift/base-centos7
 
 
+
 USER root
-RUN yum -y install maven && yum -y clean all
+RUN wget https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+RUN sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+RUN yum install -y apache-maven
+RUN alternatives --config java
+#RUN yum -y install maven && yum -y clean all
 
 COPY .s2i/bin /usr/local/s2i
 
