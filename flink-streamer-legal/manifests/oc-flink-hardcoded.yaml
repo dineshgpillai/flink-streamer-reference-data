@@ -46,6 +46,7 @@ objects:
         to:
           kind: ImageStreamTag
           name: dummy:latest
+          namespace: openshift
       postCommit: {}
       resources: {}
       runPolicy: Serial
@@ -60,8 +61,9 @@ objects:
           - name: MAVEN_ARGS_APPEND
             value: -Dmaven.test.failure.ignore verify package -Psurefire
           from:
-            kind: DockerImage
-            name: dineshpillai/flink-builder-image:latest  
+            kind: ImageStreamTag
+            name: origin-docker-builder:latest
+            namespace: openshift
         type: Source
       triggers:
       - imageChange: {}
