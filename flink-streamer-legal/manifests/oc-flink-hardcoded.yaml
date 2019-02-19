@@ -61,8 +61,8 @@ objects:
             value: -Dmaven.test.failure.ignore verify package -Psurefire
           from:
             kind: ImageStreamTag
-            name: "dineshpillai//flink-builder-image":latest
-            namespace: openshift
+            name: flink-builder-image:latest
+            namespace: dineshpillai
         type: Source
       triggers:
       - imageChange: {}
