@@ -60,9 +60,10 @@ objects:
           - name: MAVEN_ARGS_APPEND
             value: -Dmaven.test.failure.ignore verify package -Psurefire
           from:
-            kind: ImageStreamTag
-            name: flink-builder-image:latest
+            kind: DockerImage
+            name: dineshpillai/flink-builder-image:latest
             namespace: dineshpillai
+
         type: Source
       triggers:
       - imageChange: {}
