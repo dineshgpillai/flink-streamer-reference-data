@@ -31,44 +31,44 @@ parameters:
     required: true
 
 objects:
-- apiVersion: v1
-  kind: BuildConfig
-  metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftWebConsole
-    creationTimestamp: null
-    labels:
-      app: flink
-      delete: blog
-    name: flink-maven-build
-  spec:
-    output:
-      to:
-        kind: ImageStreamTag
-        name: dummy:latest
-    postCommit: {}
-    resources: {}
-    runPolicy: Serial
-    source:
-      git:
-        ref: ${SOURCE_REF}
-        uri: ${SOURCE_REPOSITORY}
-      type: Git
-    strategy:
-      sourceStrategy:
-        env:
-        - name: MAVEN_ARGS_APPEND
-          value: -Dmaven.test.failure.ignore verify package -Psurefire
-        from:
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+      creationTimestamp: null
+      labels:
+        app: flink
+        delete: blog
+      name: flink-maven-build
+    spec:
+      output:
+        to:
           kind: ImageStreamTag
-          name: flink-builder-image:latest
-          namespace: openshift
-      type: Source
-    triggers:
-    - imageChange: {}
-      type: ImageChange
-    - type: ConfigChange
-  status: {}
+          name: dummy:latest
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        git:
+          ref: ${SOURCE_REF}
+          uri: ${SOURCE_REPOSITORY}
+        type: Git
+      strategy:
+        sourceStrategy:
+          env:
+          - name: MAVEN_ARGS_APPEND
+            value: -Dmaven.test.failure.ignore verify package -Psurefire
+          from:
+            kind: ImageStreamTag
+            name: flink-builder-image:latest
+            namespace: openshift
+        type: Source
+      triggers:
+      - imageChange: {}
+        type: ImageChange
+      - type: ConfigChange
+    status: {}
 
   - apiVersion: batch/v1
     kind: Job
