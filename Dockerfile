@@ -14,6 +14,6 @@ RUN mvn -version
 
 COPY .s2i/bin /usr/local/s2i
 
-RUN wget -P /tmp http://mirrors.estointernet.in/apache/flink/flink-1.7.2/flink-1.7.2-bin-scala_2.11.tgz
+#RUN wget -P /tmp http://mirrors.estointernet.in/apache/flink/flink-1.7.2/flink-1.7.2-bin-scala_2.11.tgz
 
 LABEL io.openshift.s2i.scripts-url=image:///usr/local/s2i
