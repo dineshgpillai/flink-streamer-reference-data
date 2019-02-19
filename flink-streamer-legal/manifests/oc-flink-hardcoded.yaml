@@ -44,9 +44,8 @@ objects:
     spec:
       output:
         to:
-          kind: ImageStreamTag
+          kind: DockerImage
           name: dummy:latest
-          namespace: openshift
       postCommit: {}
       resources: {}
       runPolicy: Serial
