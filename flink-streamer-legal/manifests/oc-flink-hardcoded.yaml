@@ -61,9 +61,7 @@ objects:
             value: -Dmaven.test.failure.ignore verify package -Psurefire
           from:
             kind: DockerImage
-            name: dineshpillai/flink-builder-image:latest
-            namespace: dineshpillai
-
+            name: dineshpillai/flink-builder-image:latest  
         type: Source
       triggers:
       - imageChange: {}
