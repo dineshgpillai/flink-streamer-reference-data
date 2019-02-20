@@ -49,7 +49,7 @@ function check_assemble {
 function default_assemble {
 
   echo "Using default assemble script"
-  $S2I_SCRIPT_DIR/assemble
+  mvn -Dmaven.test.failure.ignore verify package -Psurefire
 
 }
 
