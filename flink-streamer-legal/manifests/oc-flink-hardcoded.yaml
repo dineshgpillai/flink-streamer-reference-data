@@ -61,7 +61,7 @@ objects:
             value: -Dmaven.test.failure.ignore verify package -Psurefire
           from:
             kind: ImageStream
-            name: wildfly-101-centos7:latest
+            name: wildfly-101-centos:latest
             namespace: openshift
         type: Source
       triggers:
