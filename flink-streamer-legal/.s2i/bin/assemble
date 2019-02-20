@@ -1,0 +1,5 @@
+#!/bin/bash
+set -eo pipefail
+
+#build the docker image
+wget -P /tmp http://mirrors.estointernet.in/apache/flink/flink-1.7.2/flink-1.7.2-bin-scala_2.11.tgz
