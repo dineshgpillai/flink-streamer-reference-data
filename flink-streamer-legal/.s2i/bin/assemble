@@ -4,9 +4,10 @@ set -eo pipefail
 S2I_SOURCE_DIR="/tmp/src"
 
 #build the docker image
-wget -P /tmp http://mirrors.estointernet.in/apache/flink/flink-1.7.2/flink-1.7.2-bin-scala_2.11.tgz
+#wget -P /tmp http://mirrors.estointernet.in/apache/flink/flink-1.7.2/flink-1.7.2-bin-scala_2.11.tgz
 
 cp -R ${S2I_SOURCE_DIR} /opt/app-root
 cd /opt/app-root/src
+pwd
 ls -ltr
-build.sh --from-archive /tmp/flink-1.7.2-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name dineshpillai/flink-streamer-legal:latest
+./build.sh --from-archive /tmp/flink-1.7.2-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name dineshpillai/flink-streamer-legal:latest
