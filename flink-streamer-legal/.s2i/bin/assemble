@@ -8,4 +8,5 @@ wget -P /tmp http://mirrors.estointernet.in/apache/flink/flink-1.7.2/flink-1.7.2
 
 cp -R ${S2I_SOURCE_DIR} /opt/app-root
 cd /opt/app-root/src
+ls -ltr
 build.sh --from-archive /tmp/flink-1.7.2-bin-scala_2.11.tgz --job-jar flink-streamer-legal/target/flink-streamer-legal-*.jar --image-name dineshpillai/flink-streamer-legal:latest
