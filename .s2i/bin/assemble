@@ -48,9 +48,9 @@ function check_assemble {
 
 function default_assemble {
 
-  echo "Using default assemble script"
+  echo "Running maven default..."
   mvn -Dmaven.test.failure.ignore verify package -Psurefire
-
+  echo "Done"
 }
 
 echo "Checking for module-specific S2I scripts..."
