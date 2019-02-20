@@ -60,8 +60,9 @@ objects:
           - name: MAVEN_ARGS_APPEND
             value: -Dmaven.test.failure.ignore verify package -Psurefire
           from:
-            kind: DockerImage
-            name: dineshpillai/flink-builder-image:latest
+            kind: ImageStream
+            name: openshift/wildfly-101-centos7:latest
+            namespace: openshift
         type: Source
       triggers:
       - imageChange: {}
