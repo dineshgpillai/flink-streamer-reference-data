@@ -49,6 +49,8 @@ function check_assemble {
 function default_assemble {
 
   echo "Running maven default..."
+  cp -R ${S2I_SOURCE_DIR} /opt/app-root
+  cd /opt/app-root/src
   mvn -Dmaven.test.failure.ignore verify package -Psurefire
   echo "Done"
 }
