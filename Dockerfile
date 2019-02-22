@@ -7,7 +7,9 @@ RUN wget https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-mav
 RUN sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
 RUN yum install -y java-1.8.0-openjdk-devel
 
-RUN yum install -y docker.io
+RUN yum check-update
+RUN curl -fsSL https://get.docker.com/ | sh
+
 
 RUN yum install -y apache-maven
 RUN mvn -version
